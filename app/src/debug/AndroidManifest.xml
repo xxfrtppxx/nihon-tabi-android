@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Debug builds only: the API base URL points at 10.0.2.2 (emulator's
+         loopback to the host machine's locally-running nihon-tabi-api),
+         which is plain HTTP in local dev. -->
+    <application android:usesCleartextTraffic="true" />
+
+</manifest>
