@@ -80,8 +80,8 @@ object GeoGeometrySerializer : KSerializer<GeoGeometry> {
         val jsonEncoder = encoder as? JsonEncoder
             ?: error("GeoGeometry can only be serialized to JSON")
         val coordinates = when (value.type) {
-            "Polygon" -> value.polygons.firstOrNull()?.toJson() ?: buildJsonArray {}
-            "MultiPolygon" -> buildJsonArray { value.polygons.forEach { add(it.toJson()) } }
+            "Polygon" -> value.polygons.firstOrNull()?.polygonToJson() ?: buildJsonArray {}
+            "MultiPolygon" -> buildJsonArray { value.polygons.forEach { add(it.polygonToJson()) } }
             else -> buildJsonArray {}
         }
         val element = buildJsonObject {
@@ -91,9 +91,9 @@ object GeoGeometrySerializer : KSerializer<GeoGeometry> {
         jsonEncoder.encodeJsonElement(element)
     }
 
-    private fun Polygon.toJson() = buildJsonArray { forEach { ring -> add(ring.toJson()) } }
-    private fun Ring.toJson() = buildJsonArray { forEach { point -> add(point.toJson()) } }
-    private fun List<Double>.toJson() = buildJsonArray { forEach { add(JsonPrimitive(it)) } }
+    private fun Polygon.polygonToJson() = buildJsonArray { forEach { ring -> add(ring.ringToJson()) } }
+    private fun Ring.ringToJson() = buildJsonArray { forEach { point -> add(point.pointToJson()) } }
+    private fun List<Double>.pointToJson() = buildJsonArray { forEach { add(JsonPrimitive(it)) } }
 
     private fun JsonArray.toPolygon(): Polygon = map { ring -> ring.jsonArray.toRing() }
     private fun JsonArray.toRing(): Ring = map { point -> point.jsonArray.toPoint() }
